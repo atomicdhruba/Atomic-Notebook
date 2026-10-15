@@ -15,8 +15,6 @@
 | :--- | :--- | :--- | :--- |
 | **Windows (10 / 11)** | **Executable Installer (.exe)** | **Available** | [**Download Atomic-Notebook-Setup-0.1.0.exe**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/Atomic-Notebook-Setup-0.1.0.exe) |
 | **Universal Desktop / Web** | **Live Web Application** | **Online** | [**Launch Web App (Zero Install)**](https://atomicdhruba.github.io/Atomic-Notebook/) |
-| **All Desktop Platforms** | **Portable Distribution (.zip)** | **Available** | [**Download atomic-notebook-windows-x64.zip**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip) |
-| **macOS / Linux** | **DMG / AppImage / DEB** | **In Release Pipeline** | [**GitHub Releases**](https://github.com/atomicdhruba/Atomic-Notebook/releases) |
 
 ---
 
