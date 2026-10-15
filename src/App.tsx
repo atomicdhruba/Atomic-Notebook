@@ -1,7 +1,9 @@
 import React, { useEffect, useCallback } from 'react';
 import { TitleBar } from './components/TitleBar/TitleBar';
 import { StatusBar } from './components/StatusBar/StatusBar';
+import { Workspace } from './components/Workspace/Workspace';
 import { CodeEditor } from './components/Editor/CodeEditor';
+import { PreviewPane } from './components/PreviewPane/PreviewPane';
 import { useTabStore } from './store/tabStore';
 import { appLogger } from './utils/logger';
 
@@ -77,12 +79,22 @@ export const App: React.FC = () => {
         }}
       >
         {activeTab ? (
-          <CodeEditor
-            key={activeTab.id}
-            initialContent={activeTab.content}
-            documentMode={activeTab.documentMode}
-            onDocChange={handleDocChange}
-            onCursorChange={handleCursorChange}
+          <Workspace
+            editorNode={
+              <CodeEditor
+                key={activeTab.id}
+                initialContent={activeTab.content}
+                documentMode={activeTab.documentMode}
+                onDocChange={handleDocChange}
+                onCursorChange={handleCursorChange}
+              />
+            }
+            previewNode={
+              <PreviewPane
+                content={activeTab.content}
+                documentMode={activeTab.documentMode}
+              />
+            }
           />
         ) : (
           <div

@@ -69,7 +69,39 @@ function createTabItem(content = '', title = 'Untitled-1', filePath: string | nu
   };
 }
 
-const initialTab = createTabItem('# Welcome to NotchPad\n\nHigh-performance editor workspace.');
+const INITIAL_DOCUMENT = `# NotchPad — Next-Gen Windows Notepad
+
+> [!NOTE]
+> Engineered with CodeMirror 6, Unified Markdown pipeline, and Antigravity 2.0 theme.
+
+> [!TIP]
+> Drag the central divider to adjust the split editor and live preview panes.
+
+### Architecture Overview
+| Component | Engine | Purpose |
+| :--- | :--- | :--- |
+| **Editor** | CodeMirror 6 | Zero-lag typing & syntax highlighting |
+| **Pipeline** | Unified + Remark | Live AST compilation & sanitization |
+| **Theme** | Windows 11 Acrylic | High-contrast Antigravity 2.0 design |
+
+### Code Block with Instant Copy
+\`\`\`typescript
+interface SystemConfig {
+  readonly runtime: 'Tauri' | 'Electron';
+  readonly refreshRateMs: number;
+}
+\`\`\`
+
+### KaTeX Formula Rendering
+$$\\oint_{\\partial \\Sigma} \\mathbf{B} \\cdot d\\boldsymbol{\\ell} = \\mu_0 \\left( I_{\\text{enc}} + \\varepsilon_0 \\frac{d\\Phi_E}{dt} \\right)$$
+
+- [x] Phase 1: CodeMirror 6 Core Workspace
+- [x] Phase 2: Antigravity Markdown Theme & AST Pipeline
+- [ ] Phase 3: Bidirectional Scroll Synchronization & Live HTML Sandbox
+`;
+
+const initialTab = createTabItem(INITIAL_DOCUMENT);
+
 
 export const useTabStore = create<TabState>((set, get) => ({
   tabs: [initialTab],
