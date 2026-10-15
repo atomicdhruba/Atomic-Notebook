@@ -1,17 +1,28 @@
-# NotchPad 📝⚡
+# Atomic Notebook ⚛️⚡
 
-> **Next-Gen Windows Notepad with Live Markdown & HTML Engine**  
+> **The Notepad Windows was supposed to give you.**  
 > Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, and Antigravity 2.0 visual design tokens.
 
-[![CI](https://github.com/atomicdhruba/NotchPad/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdhruba/NotchPad/actions/workflows/ci.yml)
+[![CI](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml)
+[![Download Latest](https://img.shields.io/badge/Download-v0.1.0%20(x64)-blue.svg?style=flat&logo=windows)](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8%20Strict-blue.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
+## 📥 Instant Download
+
+| Release | Architecture | Package | Link |
+| :--- | :--- | :--- | :--- |
+| **v0.1.0 (Latest)** | Windows x64 | Portable Distribution | [**Download atomic-notebook-windows-x64.zip (1.3 MB)**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip) |
+
+All releases and historical builds are accessible on the [GitHub Releases Page](https://github.com/atomicdhruba/Atomic-Notebook/releases).
+
+---
+
 ## 🌟 Key Highlights
 
-- **CodeMirror 6 Core:** Low memory footprint, instantaneous startup, fold gutter, bracket auto-closing, active line highlighting, and multi-selection.
+- **CodeMirror 6 Engine:** Low memory footprint, instantaneous startup, fold gutter, bracket auto-closing, active line highlighting, and multi-selection.
 - **Antigravity 2.0 Markdown Pipeline:** Unified + Remark + Rehype AST architecture rendering GitHub alerts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!CAUTION]`), KaTeX mathematical notation, and GFM tables.
 - **Interactive Code Cards:** Automatic language badge detection with one-click clipboard copying.
 - **Live HTML Sandbox with DOM Morphing:** Sandboxed `iframe` previewing live HTML/CSS with `idiomorph` differential DOM updates and an integrated debugging console.
@@ -20,7 +31,7 @@
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start for Developers
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) v20+ or v22+
@@ -30,8 +41,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/atomicdhruba/NotchPad.git
-cd NotchPad
+git clone https://github.com/atomicdhruba/Atomic-Notebook.git
+cd Atomic-Notebook
 
 # Install dependencies
 npm install
@@ -67,7 +78,7 @@ npm run build
 ## 🏗️ Architecture
 
 ```text
-notchpad/
+atomic-notebook/
 ├── .github/workflows/         # CI/CD typechecking and automated Windows releases
 ├── src/
 │   ├── config/constants.ts    # Debounce timings, shortcuts, and IPC tokens
@@ -93,4 +104,4 @@ notchpad/
 
 ## 📄 License
 
-MIT © NotchPad Contributors
+MIT © Atomic Notebook Contributors

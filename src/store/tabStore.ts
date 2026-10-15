@@ -69,7 +69,7 @@ function createTabItem(content = '', title = 'Untitled-1', filePath: string | nu
   };
 }
 
-const INITIAL_DOCUMENT = `# NotchPad — Next-Gen Windows Notepad
+const INITIAL_DOCUMENT = `# Atomic Notebook — Next-Gen Windows Notebook
 
 > [!NOTE]
 > Engineered with CodeMirror 6, Unified Markdown pipeline, and Antigravity 2.0 theme.

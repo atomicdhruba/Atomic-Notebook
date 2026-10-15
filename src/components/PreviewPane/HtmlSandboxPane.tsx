@@ -52,7 +52,7 @@ export const HtmlSandboxPane: React.FC<HtmlSandboxPaneProps> = ({ content }) => 
       <iframe
         ref={iframeRef}
         sandbox="allow-scripts"
-        title="NotchPad Live HTML Preview"
+        title="Atomic Notebook Live HTML Preview"
         style={{
           flex: 1,
           width: '100%',

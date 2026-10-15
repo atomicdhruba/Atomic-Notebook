@@ -78,7 +78,7 @@ export const App: React.FC = () => {
   }, [activeTabId, createTab, closeTab]);
 
   useEffect(() => {
-    logger.info(`NotchPad active tab changed: ${activeTabId}`);
+    logger.info(`Atomic Notebook active tab changed: ${activeTabId}`);
   }, [activeTabId]);
 
   return (

@@ -1,8 +1,8 @@
 {
-  "name": "notchpad",
+  "name": "atomic-notebook",
   "version": "0.1.0",
   "private": true,
-  "description": "Next-Gen Windows Notepad with Live Markdown and HTML Engine",
+  "description": "Next-Gen Windows Notebook with Live Markdown & HTML Engine",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
