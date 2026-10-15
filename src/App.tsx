@@ -1,9 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
+import { EditorView } from '@codemirror/view';
 import { TitleBar } from './components/TitleBar/TitleBar';
 import { StatusBar } from './components/StatusBar/StatusBar';
 import { Workspace } from './components/Workspace/Workspace';
 import { CodeEditor } from './components/Editor/CodeEditor';
 import { PreviewPane } from './components/PreviewPane/PreviewPane';
+import { ScrollSynchronizer } from './core/sync/scrollSync';
 import { useTabStore } from './store/tabStore';
 import { appLogger } from './utils/logger';
 
@@ -16,6 +18,10 @@ export const App: React.FC = () => {
   const updateCursor = useTabStore((state) => state.updateCursor);
   const createTab = useTabStore((state) => state.createTab);
   const closeTab = useTabStore((state) => state.closeTab);
+
+  const [editorView, setEditorView] = useState<EditorView | null>(null);
+  const [previewEl, setPreviewEl] = useState<HTMLElement | null>(null);
+  const syncRef = useRef<ScrollSynchronizer | null>(null);
 
   const handleDocChange = useCallback(
     (content: string) => {
@@ -32,6 +38,25 @@ export const App: React.FC = () => {
     },
     [activeTabId, updateCursor]
   );
+
+  useEffect(() => {
+    if (!editorView || !previewEl || activeTab?.documentMode !== 'markdown') {
+      syncRef.current?.destroy();
+      syncRef.current = null;
+      return;
+    }
+
+    const synchronizer = new ScrollSynchronizer({
+      view: editorView,
+      previewElement: previewEl
+    });
+    syncRef.current = synchronizer;
+
+    return () => {
+      synchronizer.destroy();
+      syncRef.current = null;
+    };
+  }, [editorView, previewEl, activeTab?.documentMode, activeTabId]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -53,7 +78,7 @@ export const App: React.FC = () => {
   }, [activeTabId, createTab, closeTab]);
 
   useEffect(() => {
-    logger.info(`NotchPad initialized with active tab: ${activeTabId}`);
+    logger.info(`NotchPad active tab changed: ${activeTabId}`);
   }, [activeTabId]);
 
   return (
@@ -87,12 +112,14 @@ export const App: React.FC = () => {
                 documentMode={activeTab.documentMode}
                 onDocChange={handleDocChange}
                 onCursorChange={handleCursorChange}
+                onViewReady={setEditorView}
               />
             }
             previewNode={
               <PreviewPane
                 content={activeTab.content}
                 documentMode={activeTab.documentMode}
+                onPreviewRef={setPreviewEl}
               />
             }
           />

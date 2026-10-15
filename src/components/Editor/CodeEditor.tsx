@@ -16,6 +16,7 @@ interface CodeEditorProps {
   readOnly?: boolean;
   onDocChange: (content: string) => void;
   onCursorChange?: (line: number, col: number) => void;
+  onViewReady?: (view: EditorView | null) => void;
 }
 
 export const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -25,15 +26,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   lineWrapping = true,
   readOnly = false,
   onDocChange,
-  onCursorChange
+  onCursorChange,
+  onViewReady
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const viewRef = useRef<EditorView | null>(null);
   const docChangeCallbackRef = useRef(onDocChange);
   const cursorChangeCallbackRef = useRef(onCursorChange);
+  const onViewReadyRef = useRef(onViewReady);
 
   docChangeCallbackRef.current = onDocChange;
   cursorChangeCallbackRef.current = onCursorChange;
+  onViewReadyRef.current = onViewReady;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -50,8 +54,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     });
 
     viewRef.current = instance.view;
+    onViewReadyRef.current?.(instance.view);
 
     return () => {
+      onViewReadyRef.current?.(null);
       instance.destroy();
       viewRef.current = null;
     };

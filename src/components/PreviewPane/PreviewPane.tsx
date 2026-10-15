@@ -1,19 +1,31 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { renderMarkdownToHtml } from '../../core/markdown/pipeline';
 import { DocumentMode, TIMINGS } from '../../config/constants';
+import { HtmlSandboxPane } from './HtmlSandboxPane';
 import '../../styles/markdown-theme.css';
 import 'katex/dist/katex.min.css';
 
 interface PreviewPaneProps {
   content: string;
   documentMode: DocumentMode;
+  onPreviewRef?: (el: HTMLElement | null) => void;
 }
 
-export const PreviewPane: React.FC<PreviewPaneProps> = ({ content, documentMode }) => {
+export const PreviewPane: React.FC<PreviewPaneProps> = ({
+  content,
+  documentMode,
+  onPreviewRef
+}) => {
   const [renderedHtml, setRenderedHtml] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    onPreviewRef?.(containerRef.current);
+  }, [onPreviewRef]);
+
+  useEffect(() => {
+    if (documentMode === 'html') return;
+
     let isCancelled = false;
 
     const timer = setTimeout(async () => {
@@ -21,10 +33,6 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ content, documentMode 
         const html = await renderMarkdownToHtml(content);
         if (!isCancelled) {
           setRenderedHtml(html);
-        }
-      } else if (documentMode === 'html') {
-        if (!isCancelled) {
-          setRenderedHtml(content);
         }
       } else {
         if (!isCancelled) {
@@ -72,9 +80,16 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({ content, documentMode 
     };
   }, []);
 
+  if (documentMode === 'html') {
+    return <HtmlSandboxPane content={content} />;
+  }
+
   return (
     <div
-      ref={containerRef}
+      ref={(el) => {
+        containerRef.current = el;
+        onPreviewRef?.(el);
+      }}
       className="markdown-preview"
       style={{
         width: '100%',
