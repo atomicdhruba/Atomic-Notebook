@@ -3,7 +3,7 @@ import { Extension } from '@codemirror/state';
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags as t } from '@lezer/highlight';
 
-export const notchpadBaseTheme = EditorView.theme({
+export const atomicBaseTheme = EditorView.theme({
   '&': {
     color: 'var(--cm-fg)',
     backgroundColor: 'var(--cm-bg)',
@@ -13,8 +13,8 @@ export const notchpadBaseTheme = EditorView.theme({
   },
   '.cm-content': {
     caretColor: 'var(--cm-cursor)',
-    padding: '8px 0',
-    lineHeight: '1.6'
+    padding: '12px 0',
+    lineHeight: '1.65'
   },
   '.cm-cursor, .cm-dropCursor': {
     borderLeftColor: 'var(--cm-cursor)',
@@ -30,7 +30,7 @@ export const notchpadBaseTheme = EditorView.theme({
     backgroundColor: 'var(--cm-gutter-bg)',
     color: 'var(--cm-gutter-fg)',
     borderRight: '1px solid var(--border-subtle)',
-    paddingRight: '6px'
+    paddingRight: '8px'
   },
   '.cm-activeLineGutter': {
     backgroundColor: 'transparent',
@@ -52,7 +52,7 @@ export const notchpadBaseTheme = EditorView.theme({
   }
 });
 
-export const notchpadHighlightStyle = HighlightStyle.define([
+export const atomicHighlightStyle = HighlightStyle.define([
   { tag: t.keyword, color: '#c678dd', fontWeight: 'bold' },
   { tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName], color: '#e06c75' },
   { tag: [t.function(t.variableName), t.labelName], color: '#61afef' },
@@ -72,5 +72,5 @@ export const notchpadHighlightStyle = HighlightStyle.define([
 ]);
 
 export function getEditorThemeExtension(): Extension {
-  return [notchpadBaseTheme, syntaxHighlighting(notchpadHighlightStyle)];
+  return [atomicBaseTheme, syntaxHighlighting(atomicHighlightStyle)];
 }

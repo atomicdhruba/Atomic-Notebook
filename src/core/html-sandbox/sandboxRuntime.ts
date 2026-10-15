@@ -5,7 +5,7 @@ export interface ConsolePayload {
 }
 
 export interface SandboxMessage {
-  type: 'NOTCHPAD_HTML_UPDATE';
+  type: 'ATOMIC_HTML_UPDATE';
   content: string;
 }
 
@@ -22,7 +22,7 @@ export const INJECTED_RUNTIME_CODE = `
   const dispatchConsole = (level, args) => {
     try {
       window.parent.postMessage({
-        type: 'NOTCHPAD_CONSOLE',
+        type: 'ATOMIC_CONSOLE',
         payload: {
           level,
           messages: Array.from(args).map(serializeArg),
@@ -54,7 +54,7 @@ export const INJECTED_RUNTIME_CODE = `
 
   window.addEventListener('message', (event) => {
     const data = event.data;
-    if (!data || data.type !== 'NOTCHPAD_HTML_UPDATE') return;
+    if (!data || data.type !== 'ATOMIC_HTML_UPDATE') return;
 
     try {
       const parser = new DOMParser();

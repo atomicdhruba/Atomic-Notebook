@@ -1,7 +1,7 @@
 # Atomic Notebook ⚛️⚡
 
-> **The Notepad Windows was supposed to give you.**  
-> Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, Electron runtime, and Antigravity 2.0 visual design tokens.
+> **High-performance, beautifully crafted Markdown & Code notebook for Windows and the Web.**  
+> Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, Electron runtime, and modern visual design tokens.
 
 [![CI](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml)
 [![Download Windows .exe](https://img.shields.io/badge/Download-.EXE%20Installer-blue.svg?style=for-the-badge&logo=windows)](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/Atomic-Notebook-Setup-0.1.0.exe)
@@ -22,11 +22,11 @@
 
 - **Native Windows Desktop Experience:** Packaged with Electron, custom frameless titlebar with native Windows 11 window controls (minimize, maximize, close), and drag regions.
 - **CodeMirror 6 Engine:** Low memory footprint, instantaneous startup, fold gutter, bracket auto-closing, active line highlighting, and multi-selection.
-- **Antigravity 2.0 Markdown Pipeline:** Unified + Remark + Rehype AST architecture rendering GitHub alerts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!CAUTION]`), KaTeX mathematical notation, and GFM tables.
+- **Modern Markdown Pipeline:** Unified + Remark + Rehype AST architecture rendering GitHub alerts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!CAUTION]`), KaTeX mathematical notation, and GFM tables.
 - **Interactive Code Cards:** Automatic language badge detection with one-click clipboard copying.
 - **Live HTML Sandbox with DOM Morphing:** Sandboxed `iframe` previewing live HTML/CSS with `idiomorph` differential DOM updates and an integrated debugging console.
 - **Piecewise Linear Scroll Sync:** Bidirectional scroll interpolation matching CodeMirror lines directly to preview DOM elements via source-map line attributes.
-- **Zero-AI-Slop Architecture:** Strict TypeScript (`strict`, `noUnusedLocals`, `noImplicitReturns`), no file exceeding 220 LOC, zero magic values, and central diagnostic logging.
+- **Clean Engineering & Reliability:** Strict TypeScript typing, modular component architecture, zero runtime bloat, and unified diagnostic logging.
 
 ---
 

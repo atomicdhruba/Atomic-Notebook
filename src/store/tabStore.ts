@@ -69,64 +69,60 @@ function createTabItem(content = '', title = 'Untitled-1', filePath: string | nu
   };
 }
 
-const INITIAL_DOCUMENT = `# Atomic Notebook — Next-Gen Windows Notebook
+const INITIAL_DOCUMENT = `# Welcome to Atomic Notebook ⚛️
 
 > [!NOTE]
-> Engineered with CodeMirror 6, Unified Markdown pipeline, and Antigravity 2.0 theme.
+> Atomic Notebook is a fast, distraction-free markdown and code notebook featuring real-time preview, mathematical typesetting, and visual architecture modeling.
 
 > [!TIP]
-> Drag the central divider to adjust the split editor and live preview panes.
+> Drag the central divider to customize your split view, or use the view toggles on the top toolbar for focused Editor or Preview modes.
 
-### Architecture Overview
-| Component | Engine | Purpose |
+### Key Capabilities
+| Feature | Engine | Description |
 | :--- | :--- | :--- |
-| **Editor** | CodeMirror 6 | Zero-lag typing & syntax highlighting |
-| **Pipeline** | Unified + Remark | Live AST compilation & sanitization |
-| **Theme** | Windows 11 Acrylic | High-contrast Antigravity 2.0 design |
+| **Code Editor** | CodeMirror 6 | Zero-latency input, bracket pairing, and code folding |
+| **Markdown Pipeline** | Unified + Remark | Live AST compilation with GitHub alerts and syntax themes |
+| **Math Typesetting** | KaTeX | High-speed rendering for complex mathematical notations |
+| **Diagrams** | Mermaid.js | Vector flowcharts, sequences, and state diagrams in real-time |
 
-### Architecture Flowchart
+### Reactive Architecture
 \`\`\`mermaid
 graph LR
-  A[CodeMirror 6] -->|Unified AST| B(Remark + Rehype)
-  B -->|Source Mapped| C[Live Preview]
-  C -->|Idiomorph| D((DOM Morph))
+  A[Input Stream] -->|AST Pipeline| B(Unified Processor)
+  B -->|Source Maps| C[Realtime Preview]
+  C -->|Sync Engine| D((Bi-directional Scroll))
 \`\`\`
 
-### Code Block with Instant Copy
+### Code Cards with Quick Copy
 \`\`\`typescript
-interface SystemConfig {
-  readonly runtime: 'Tauri' | 'Electron';
-  readonly refreshRateMs: number;
+export interface NotebookMetrics {
+  readonly renderTimeMs: number;
+  readonly activeTokens: number;
+  readonly isSynchronized: boolean;
 }
 \`\`\`
 
 ### KaTeX Formula Rendering
 $$\\oint_{\\partial \\Sigma} \\mathbf{B} \\cdot d\\boldsymbol{\\ell} = \\mu_0 \\left( I_{\\text{enc}} + \\varepsilon_0 \\frac{d\\Phi_E}{dt} \\right)$$
 
-- [x] Phase 1: CodeMirror 6 Core Workspace
-- [x] Phase 2: Antigravity Markdown Theme & AST Pipeline
-- [x] Phase 3: Bidirectional Scroll Synchronization & Live HTML Sandbox
-- [x] Phase 4: Native Desktop Packaging & GitHub Pages Release
+### Quick Start Checklist
+- [x] Launch Atomic Notebook
+- [ ] Open or create a markdown document (Ctrl + O / Ctrl + T)
+- [ ] Customize Dark or Light theme from the floating toolbar
+- [ ] Export or save notes to your local filesystem (Ctrl + S)
 `;
 
 const initialTab = createTabItem(INITIAL_DOCUMENT);
-
-
 
 export const useTabStore = create<TabState>((set, get) => ({
   tabs: [initialTab],
   activeTabId: initialTab.id,
 
   createTab: (content = '', title, filePath = null) => {
-    const tabCount = get().tabs.length + 1;
-    const resolvedTitle = title ?? `Untitled-${tabCount}`;
+    const resolvedTitle = title ?? `Untitled-${get().tabs.length + 1}`;
     const newTab = createTabItem(content, resolvedTitle, filePath);
     logger.debug(`Tab created: ${newTab.id} (${resolvedTitle})`);
-
-    set((state) => ({
-      tabs: [...state.tabs, newTab],
-      activeTabId: newTab.id
-    }));
+    set((state) => ({ tabs: [...state.tabs, newTab], activeTabId: newTab.id }));
     return newTab.id;
   },
 
@@ -142,82 +138,56 @@ export const useTabStore = create<TabState>((set, get) => ({
       return;
     }
 
-    /* Clamp index to right-adjacent or nearest preceding neighbor when active tab closes */
     let nextActiveId = activeTabId;
     if (activeTabId === id) {
       const nextIndex = Math.min(targetIndex, remaining.length - 1);
-      const nextTab = remaining[nextIndex];
-      if (nextTab) {
-        nextActiveId = nextTab.id;
-      }
+      const fallbackTab = remaining[0];
+      nextActiveId = remaining[nextIndex]?.id ?? (fallbackTab ? fallbackTab.id : '');
     }
-
     set({ tabs: remaining, activeTabId: nextActiveId });
   },
 
   setActiveTab: (id: string) => {
-    if (get().activeTabId === id) return;
-    set({ activeTabId: id });
+    if (get().activeTabId !== id) set({ activeTabId: id });
   },
 
   updateContent: (id: string, content: string) => {
     set((state) => ({
-      tabs: state.tabs.map((tab) => {
-        if (tab.id !== id) return tab;
-        return {
-          ...tab,
-          content,
-          isDirty: content !== tab.savedContent
-        };
-      })
+      tabs: state.tabs.map((tab) =>
+        tab.id === id ? { ...tab, content, isDirty: content !== tab.savedContent } : tab
+      )
     }));
   },
 
   markSaved: (id: string, filePath: string) => {
     const fileName = filePath.split(/[/\\]/).pop() ?? 'Untitled';
     set((state) => ({
-      tabs: state.tabs.map((tab) => {
-        if (tab.id !== id) return tab;
-        return {
-          ...tab,
-          filePath,
-          title: fileName,
-          savedContent: tab.content,
-          isDirty: false,
-          documentMode: detectModeFromPath(filePath)
-        };
-      })
+      tabs: state.tabs.map((tab) =>
+        tab.id === id
+          ? { ...tab, filePath, title: fileName, savedContent: tab.content, isDirty: false, documentMode: detectModeFromPath(filePath) }
+          : tab
+      )
     }));
   },
 
   setDocumentMode: (id: string, documentMode: DocumentMode) => {
-    set((state) => ({
-      tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, documentMode } : tab))
-    }));
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, documentMode } : tab)) }));
   },
 
   setLineEnding: (id: string, lineEnding: LineEnding) => {
-    set((state) => ({
-      tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, lineEnding } : tab))
-    }));
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, lineEnding } : tab)) }));
   },
 
   setEncoding: (id: string, encoding: SupportedEncoding) => {
-    set((state) => ({
-      tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, encoding } : tab))
-    }));
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, encoding } : tab)) }));
   },
 
   updateCursor: (id: string, cursorLine: number, cursorCol: number) => {
-    set((state) => ({
-      tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, cursorLine, cursorCol } : tab))
-    }));
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, cursorLine, cursorCol } : tab)) }));
   },
 
   updateScroll: (id: string, scrollPercent: number) => {
-    set((state) => ({
-      tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, scrollPercent } : tab))
-    }));
+    set((state) => ({ tabs: state.tabs.map((tab) => (tab.id === id ? { ...tab, scrollPercent } : tab)) }));
   },
 
   getActiveTab: () => {

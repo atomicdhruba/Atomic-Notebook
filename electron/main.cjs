@@ -63,11 +63,11 @@ if (!gotTheLock) {
 }
 
 function setupIpcHandlers() {
-  ipcMain.handle('notchpad:window:minimize', () => {
+  ipcMain.handle('atomic:window:minimize', () => {
     mainWindow?.minimize();
   });
 
-  ipcMain.handle('notchpad:window:maximize', () => {
+  ipcMain.handle('atomic:window:maximize', () => {
     if (!mainWindow) return false;
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize();
@@ -78,11 +78,11 @@ function setupIpcHandlers() {
     }
   });
 
-  ipcMain.handle('notchpad:window:close', () => {
+  ipcMain.handle('atomic:window:close', () => {
     mainWindow?.close();
   });
 
-  ipcMain.handle('notchpad:dialog:open', async () => {
+  ipcMain.handle('atomic:dialog:open', async () => {
     if (!mainWindow) return null;
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       title: 'Open Document',
@@ -101,7 +101,7 @@ function setupIpcHandlers() {
     return { filePath, content };
   });
 
-  ipcMain.handle('notchpad:dialog:save', async (_event, defaultName) => {
+  ipcMain.handle('atomic:dialog:save', async (_event, defaultName) => {
     if (!mainWindow) return null;
     const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
       title: 'Save Document',
@@ -116,12 +116,13 @@ function setupIpcHandlers() {
     return canceled ? null : filePath;
   });
 
-  ipcMain.handle('notchpad:fs:read', async (_event, filePath, encoding = 'utf-8') => {
+  ipcMain.handle('atomic:fs:read', async (_event, filePath, encoding = 'utf-8') => {
     return await fs.readFile(filePath, encoding);
   });
 
-  ipcMain.handle('notchpad:fs:write', async (_event, filePath, content, encoding = 'utf-8') => {
+  ipcMain.handle('atomic:fs:write', async (_event, filePath, content, encoding = 'utf-8') => {
     await fs.writeFile(filePath, content, encoding);
     return true;
   });
+
 }

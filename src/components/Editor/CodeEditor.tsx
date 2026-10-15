@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { EditorView } from '@codemirror/view';
 import {
-  createNotchpadEditor,
+  createAtomicEditor,
   reconfigureLanguage,
   reconfigureLineWrapping,
   reconfigureTabSize
@@ -42,7 +42,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const instance = createNotchpadEditor({
+    const instance = createAtomicEditor({
       parent: containerRef.current,
       initialContent,
       documentMode,

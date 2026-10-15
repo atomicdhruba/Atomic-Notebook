@@ -29,13 +29,13 @@ export const KEYBINDINGS = {
 } as const;
 
 export const IPC_CHANNELS = {
-  FS_READ_FILE: 'notchpad:fs:read',
-  FS_WRITE_FILE: 'notchpad:fs:write',
-  FS_SHOW_OPEN_DIALOG: 'notchpad:dialog:open',
-  FS_SHOW_SAVE_DIALOG: 'notchpad:dialog:save',
-  WINDOW_MINIMIZE: 'notchpad:window:minimize',
-  WINDOW_MAXIMIZE: 'notchpad:window:maximize',
-  WINDOW_CLOSE: 'notchpad:window:close'
+  FS_READ_FILE: 'atomic:fs:read',
+  FS_WRITE_FILE: 'atomic:fs:write',
+  FS_SHOW_OPEN_DIALOG: 'atomic:dialog:open',
+  FS_SHOW_SAVE_DIALOG: 'atomic:dialog:save',
+  WINDOW_MINIMIZE: 'atomic:window:minimize',
+  WINDOW_MAXIMIZE: 'atomic:window:maximize',
+  WINDOW_CLOSE: 'atomic:window:close'
 } as const;
 
 export const FILE_EXTENSIONS = {

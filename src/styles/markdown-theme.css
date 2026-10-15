@@ -1,10 +1,10 @@
 .markdown-preview {
   font-family: var(--font-sans);
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.68;
   font-size: 14.5px;
   word-break: break-word;
-  padding: 24px 32px;
+  padding: 28px 36px;
 }
 
 .markdown-preview h1,
@@ -18,8 +18,8 @@
   margin-bottom: 0.6em;
 }
 
-.markdown-preview h1 { font-size: 1.85em; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.3em; }
-.markdown-preview h2 { font-size: 1.45em; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.25em; }
+.markdown-preview h1 { font-size: 1.85em; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.35em; }
+.markdown-preview h2 { font-size: 1.45em; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.28em; }
 .markdown-preview h3 { font-size: 1.2em; }
 .markdown-preview h4 { font-size: 1.05em; }
 
@@ -54,16 +54,16 @@
   background-color: var(--cm-bg);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  margin: 1.2em 0;
+  margin: 1.3em 0;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .mermaid-diagram-card {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 24px;
   background: var(--bg-surface);
 }
 
@@ -76,7 +76,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 12px;
+  padding: 7px 14px;
   background-color: var(--bg-surface-elevated);
   border-bottom: 1px solid var(--border-subtle);
   font-size: 11px;
@@ -108,7 +108,7 @@
 
 .code-block-wrapper pre {
   margin: 0;
-  padding: 12px 16px;
+  padding: 14px 18px;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 13px;
@@ -119,15 +119,15 @@
   border-left: 3.5px solid var(--callout-note);
   background-color: var(--callout-note-bg);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  padding: 12px 16px;
-  margin: 1.2em 0;
+  padding: 12px 18px;
+  margin: 1.3em 0;
 }
 .callout-title {
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 12.5px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 6px;
@@ -168,7 +168,7 @@
 
 .markdown-preview th,
 .markdown-preview td {
-  padding: 8px 14px;
+  padding: 9px 14px;
   border: 1px solid var(--border-subtle);
   text-align: left;
 }
@@ -193,6 +193,6 @@
 .markdown-preview .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 8px 0;
-  margin: 1em 0;
+  padding: 10px 0;
+  margin: 1.1em 0;
 }

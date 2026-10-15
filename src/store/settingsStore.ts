@@ -3,7 +3,7 @@ import { ThemeMode, ViewMode, EDITOR_DEFAULTS } from '../config/constants';
 import { appLogger } from '../utils/logger';
 
 const logger = appLogger.createScope('settingsStore');
-const STORAGE_KEY = 'notchpad_settings_v1';
+const STORAGE_KEY = 'atomic_notebook_settings_v1';
 
 export interface SettingsState {
   theme: ThemeMode;

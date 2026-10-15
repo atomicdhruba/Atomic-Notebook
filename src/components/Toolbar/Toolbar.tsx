@@ -15,6 +15,20 @@ import { useSettingsStore } from '../../store/settingsStore';
 import { useTabStore } from '../../store/tabStore';
 import { DocumentMode } from '../../config/constants';
 
+const btnStyle: React.CSSProperties = {
+  background: 'transparent',
+  border: '1px solid var(--border-subtle)',
+  color: 'var(--text-secondary)',
+  borderRadius: 'var(--radius-sm)',
+  padding: '3px 8px',
+  fontSize: '11px',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  transition: 'all var(--transition-fast)'
+};
+
 export const Toolbar: React.FC = () => {
   const viewMode = useSettingsStore((state) => state.viewMode);
   const setViewMode = useSettingsStore((state) => state.setViewMode);
@@ -25,7 +39,6 @@ export const Toolbar: React.FC = () => {
 
   const activeTab = useTabStore((state) => state.getActiveTab());
   const setDocumentMode = useTabStore((state) => state.setDocumentMode);
-
   const [hasCopied, setHasCopied] = useState(false);
 
   const handleCopyDoc = async () => {
@@ -35,7 +48,7 @@ export const Toolbar: React.FC = () => {
       setHasCopied(true);
       setTimeout(() => setHasCopied(false), 1500);
     } catch {
-      /* Fallback handling for clipboard rejection */
+      /* Clipboard permission fallback */
     }
   };
 
@@ -52,17 +65,13 @@ export const Toolbar: React.FC = () => {
     URL.revokeObjectURL(url);
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
-
   return (
     <div
       style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '4px 12px',
+        padding: '5px 12px',
         backgroundColor: 'var(--bg-surface-elevated)',
         borderBottom: '1px solid var(--border-subtle)',
         fontSize: '12px',
@@ -71,134 +80,94 @@ export const Toolbar: React.FC = () => {
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div style={{ display: 'flex', backgroundColor: 'var(--bg-surface)', borderRadius: 'var(--radius-sm)', padding: '2px', border: '1px solid var(--border-subtle)' }}>
-          <button
-            type="button"
-            onClick={() => setViewMode('split')}
-            style={{
-              background: viewMode === 'split' ? 'var(--accent-surface)' : 'transparent',
-              color: viewMode === 'split' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              border: 'none',
-              padding: '3px 8px',
-              borderRadius: '3px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            title="Split Editor & Preview"
-          >
-            <Columns2 size={13} />
-            <span>Split</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('editor')}
-            style={{
-              background: viewMode === 'editor' ? 'var(--accent-surface)' : 'transparent',
-              color: viewMode === 'editor' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              border: 'none',
-              padding: '3px 8px',
-              borderRadius: '3px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            title="Editor Only"
-          >
-            <FileCode2 size={13} />
-            <span>Editor</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('preview')}
-            style={{
-              background: viewMode === 'preview' ? 'var(--accent-surface)' : 'transparent',
-              color: viewMode === 'preview' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              border: 'none',
-              padding: '3px 8px',
-              borderRadius: '3px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              fontSize: '11px',
-              fontWeight: 500
-            }}
-            title="Preview Reader Only"
-          >
-            <Eye size={13} />
-            <span>Preview</span>
-          </button>
-        </div>
-
-        {activeTab && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '6px' }}>
-            {(['markdown', 'html', 'plaintext'] as DocumentMode[]).map((mode) => (
+          {[
+            { mode: 'split', icon: Columns2, label: 'Split' },
+            { mode: 'editor', icon: FileCode2, label: 'Editor' },
+            { mode: 'preview', icon: Eye, label: 'Preview' }
+          ].map(({ mode, icon: Icon, label }) => {
+            const isCurrent = viewMode === mode;
+            return (
               <button
                 key={mode}
                 type="button"
-                onClick={() => setDocumentMode(activeTab.id, mode)}
+                onClick={() => setViewMode(mode as any)}
                 style={{
-                  background: activeTab.documentMode === mode ? 'var(--bg-surface)' : 'transparent',
-                  color: activeTab.documentMode === mode ? 'var(--text-primary)' : 'var(--text-muted)',
-                  border: activeTab.documentMode === mode ? '1px solid var(--border-default)' : '1px solid transparent',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: '2px 8px',
-                  fontSize: '10.5px',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer'
+                  background: isCurrent ? 'var(--accent-surface)' : 'transparent',
+                  color: isCurrent ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                  border: 'none',
+                  padding: '3px 8px',
+                  borderRadius: '3px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '11px',
+                  fontWeight: isCurrent ? 600 : 400
                 }}
               >
-                {mode === 'plaintext' ? 'txt' : mode}
+                <Icon size={12} />
+                <span>{label}</span>
               </button>
-            ))}
+            );
+          })}
+        </div>
+
+        {activeTab && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '4px' }}>
+            {(['markdown', 'html', 'plaintext'] as DocumentMode[]).map((mode) => {
+              const isActive = activeTab.documentMode === mode;
+              return (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setDocumentMode(activeTab.id, mode)}
+                  style={{
+                    background: isActive ? 'var(--bg-surface)' : 'transparent',
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                    border: isActive ? '1px solid var(--border-default)' : '1px solid transparent',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '2px 7px',
+                    fontSize: '10px',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    fontWeight: isActive ? 600 : 400
+                  }}
+                >
+                  {mode === 'plaintext' ? 'txt' : mode}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px', backgroundColor: 'var(--bg-surface)', padding: '1px 4px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
           <button
             type="button"
-            onClick={() => setFontSize(fontSize - 1)}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '3px' }}
+            onClick={() => setFontSize(Math.max(10, fontSize - 1))}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '3px', display: 'flex' }}
             title="Decrease Font Size"
           >
-            <ZoomOut size={13} />
+            <ZoomOut size={12} />
           </button>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)', minWidth: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', minWidth: '28px', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
             {fontSize}px
           </span>
           <button
             type="button"
-            onClick={() => setFontSize(fontSize + 1)}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '3px' }}
+            onClick={() => setFontSize(Math.min(32, fontSize + 1))}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', padding: '3px', display: 'flex' }}
             title="Increase Font Size"
           >
-            <ZoomIn size={13} />
+            <ZoomIn size={12} />
           </button>
         </div>
 
         <button
           type="button"
           onClick={handleCopyDoc}
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--border-subtle)',
-            color: 'var(--text-secondary)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '3px 8px',
-            fontSize: '11px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px'
-          }}
+          style={btnStyle}
           title="Copy Document Text"
         >
           {hasCopied ? <Check size={12} style={{ color: '#10b981' }} /> : <Copy size={12} />}
@@ -208,40 +177,20 @@ export const Toolbar: React.FC = () => {
         <button
           type="button"
           onClick={handleDownloadFile}
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--border-subtle)',
-            color: 'var(--text-secondary)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '3px 8px',
-            fontSize: '11px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px'
-          }}
-          title="Download File"
+          style={btnStyle}
+          title="Export Document File"
         >
           <Download size={12} />
-          <span>Save</span>
+          <span>Export</span>
         </button>
 
         <button
           type="button"
-          onClick={toggleTheme}
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--border-subtle)',
-            color: 'var(--text-secondary)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '3px 8px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center'
-          }}
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          style={{ ...btnStyle, padding: '4px 6px' }}
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
         >
-          {theme === 'dark' ? <Sun size={13} style={{ color: '#f59e0b' }} /> : <Moon size={13} style={{ color: '#6366f1' }} />}
+          {theme === 'dark' ? <Sun size={12} style={{ color: '#f59e0b' }} /> : <Moon size={12} style={{ color: '#6366f1' }} />}
         </button>
       </div>
     </div>

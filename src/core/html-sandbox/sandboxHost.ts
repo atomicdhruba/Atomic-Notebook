@@ -25,7 +25,7 @@ export class SandboxHost {
     /* Verify message originated from our sandboxed iframe window */
     if (event.source !== this.iframe.contentWindow) return;
     const data = event.data;
-    if (data && data.type === 'NOTCHPAD_CONSOLE') {
+    if (data && data.type === 'ATOMIC_CONSOLE') {
       this.onConsoleLog?.(data.payload as ConsolePayload);
     }
   };
@@ -60,7 +60,7 @@ export class SandboxHost {
     try {
       this.iframe.contentWindow?.postMessage(
         {
-          type: 'NOTCHPAD_HTML_UPDATE',
+          type: 'ATOMIC_HTML_UPDATE',
           content
         },
         '*'

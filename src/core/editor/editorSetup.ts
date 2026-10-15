@@ -57,12 +57,12 @@ export interface EditorInitOptions {
   onCursorChange?: (line: number, col: number) => void;
 }
 
-export interface NotchpadEditorInstance {
+export interface AtomicEditorInstance {
   view: EditorView;
   destroy: () => void;
 }
 
-export function createNotchpadEditor(options: EditorInitOptions): NotchpadEditorInstance {
+export function createAtomicEditor(options: EditorInitOptions): AtomicEditorInstance {
   const {
     parent,
     initialContent = '',
