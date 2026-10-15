@@ -1,27 +1,28 @@
 # Atomic Notebook ⚛️⚡
 
 > **The Notepad Windows was supposed to give you.**  
-> Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, and Antigravity 2.0 visual design tokens.
+> Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, Electron runtime, and Antigravity 2.0 visual design tokens.
 
 [![CI](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdhruba/Atomic-Notebook/actions/workflows/ci.yml)
-[![Download Latest](https://img.shields.io/badge/Download-v0.1.0%20(x64)-blue.svg?style=flat&logo=windows)](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8%20Strict-blue.svg)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Download Windows .exe](https://img.shields.io/badge/Download-.EXE%20Installer-blue.svg?style=for-the-badge&logo=windows)](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/Atomic-Notebook-Setup-0.1.0.exe)
+[![Open Web App](https://img.shields.io/badge/Launch-Web%20App-purple.svg?style=for-the-badge&logo=googlechrome)](https://atomicdhruba.github.io/Atomic-Notebook/)
 
 ---
 
-## 📥 Instant Download
+## 📥 Downloads & Access
 
-| Release | Architecture | Package | Link |
+| Platform | Format | Status | Download Link |
 | :--- | :--- | :--- | :--- |
-| **v0.1.0 (Latest)** | Windows x64 | Portable Distribution | [**Download atomic-notebook-windows-x64.zip (1.3 MB)**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip) |
-
-All releases and historical builds are accessible on the [GitHub Releases Page](https://github.com/atomicdhruba/Atomic-Notebook/releases).
+| **Windows (10 / 11)** | **Executable Installer (.exe)** | **Available** | [**Download Atomic-Notebook-Setup-0.1.0.exe**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/Atomic-Notebook-Setup-0.1.0.exe) |
+| **Universal Desktop / Web** | **Live Web Application** | **Online** | [**Launch Web App (Zero Install)**](https://atomicdhruba.github.io/Atomic-Notebook/) |
+| **All Desktop Platforms** | **Portable Distribution (.zip)** | **Available** | [**Download atomic-notebook-windows-x64.zip**](https://github.com/atomicdhruba/Atomic-Notebook/releases/download/v0.1.0/atomic-notebook-windows-x64.zip) |
+| **macOS / Linux** | **DMG / AppImage / DEB** | **In Release Pipeline** | [**GitHub Releases**](https://github.com/atomicdhruba/Atomic-Notebook/releases) |
 
 ---
 
 ## 🌟 Key Highlights
 
+- **Native Windows Desktop Experience:** Packaged with Electron, custom frameless titlebar with native Windows 11 window controls (minimize, maximize, close), and drag regions.
 - **CodeMirror 6 Engine:** Low memory footprint, instantaneous startup, fold gutter, bracket auto-closing, active line highlighting, and multi-selection.
 - **Antigravity 2.0 Markdown Pipeline:** Unified + Remark + Rehype AST architecture rendering GitHub alerts (`[!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!CAUTION]`), KaTeX mathematical notation, and GFM tables.
 - **Interactive Code Cards:** Automatic language badge detection with one-click clipboard copying.
@@ -31,35 +32,28 @@ All releases and historical builds are accessible on the [GitHub Releases Page](
 
 ---
 
-## 🚀 Quick Start for Developers
+## 🚀 Desktop & Developer Commands
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) v20+ or v22+
-- `npm` 10+
-
-### Installation & Run
+### Launching the Desktop App in Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/atomicdhruba/Atomic-Notebook.git
-cd Atomic-Notebook
-
-# Install dependencies
-npm install
-
-# Start development server
+# Start frontend and electron shell
 npm run dev
 ```
 
-### Production Build & Typecheck
+### Compiling Executables for Desktop Devices
 
 ```bash
-# Verify TypeScript strict types
-npm run typecheck
+# Compile Windows .exe installer and portable executable
+npm run electron:build
 
-# Build optimized production bundle
-npm run build
+# Multi-platform build for Windows, macOS, and Linux
+npm run electron:build:all
 ```
+
+The compiled binaries will be output into the `release-dist/` folder:
+- `release-dist/Atomic-Notebook-Setup-0.1.0.exe` (Windows NSIS Setup)
+- `release-dist/win-unpacked/Atomic Notebook.exe` (Standalone Portable Exe)
 
 ---
 
@@ -70,6 +64,7 @@ npm run build
 | <kbd>Ctrl</kbd> + <kbd>T</kbd> | Open New Tab |
 | <kbd>Ctrl</kbd> + <kbd>W</kbd> | Close Current Tab |
 | <kbd>Ctrl</kbd> + <kbd>S</kbd> | Save Document |
+| <kbd>Ctrl</kbd> + <kbd>O</kbd> | Open File Dialog |
 | <kbd>Ctrl</kbd> + <kbd>F</kbd> | Search in Document |
 | <kbd>Tab</kbd> / <kbd>Shift</kbd> + <kbd>Tab</kbd> | Indent / Unindent selection |
 
@@ -79,7 +74,12 @@ npm run build
 
 ```text
 atomic-notebook/
-├── .github/workflows/         # CI/CD typechecking and automated Windows releases
+├── electron/
+│   ├── main.cjs               # Native window setup, IPC bridges, and single-instance lock
+│   └── preload.cjs            # Secure contextBridge API for file I/O and window controls
+├── .github/workflows/
+│   ├── ci.yml                 # Automated typecheck and build validation
+│   └── release.yml            # Cross-platform matrix builder for Windows, macOS, and Linux
 ├── src/
 │   ├── config/constants.ts    # Debounce timings, shortcuts, and IPC tokens
 │   ├── utils/logger.ts        # Central diagnostic logger
@@ -94,7 +94,7 @@ atomic-notebook/
 │   │   ├── html-sandbox/      # Sandbox host, idiomorph DOM morphing, console bridge
 │   │   └── sync/              # Piecewise linear bidirectional scroll synchronizer
 │   └── components/
-│       ├── TitleBar/          # Windows custom titlebar and tab strip
+│       ├── TitleBar/          # Windows custom titlebar with native window buttons
 │       ├── Workspace/         # Draggable split-pane container
 │       ├── PreviewPane/       # Live Markdown & HTML sandbox panes
 │       └── StatusBar/         # Live metrics, line endings, encodings, and position

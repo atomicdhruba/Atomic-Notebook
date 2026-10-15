@@ -1,15 +1,29 @@
-name: Release
+name: Multi-Platform Release
 
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
-  build-release:
-    runs-on: windows-latest
+  release-desktop:
+    name: Build & Release Desktop App (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
+
     permissions:
       contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,22 +34,21 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libarchive-tools libfuse2
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Build production bundle
+      - name: Compile frontend bundle
         run: npm run build
 
-      - name: Compress distribution bundle
-        shell: pwsh
-        run: |
-          Compress-Archive -Path dist/* -DestinationPath atomic-notebook-windows-x64.zip
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Build and Publish Desktop Executables
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          files: atomic-notebook-windows-x64.zip
-          generate_release_notes: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release: true
+          args: --${{ matrix.platform }}
