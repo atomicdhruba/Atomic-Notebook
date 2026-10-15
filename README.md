@@ -3,7 +3,7 @@
 > **Next-Gen Windows Notepad with Live Markdown & HTML Engine**  
 > Engineered with CodeMirror 6, Unified AST pipeline, Idiomorph DOM morphing, and Antigravity 2.0 visual design tokens.
 
-[![CI](https://github.com/atomic/notchpad/actions/workflows/ci.yml/badge.svg)](https://github.com/atomic/notchpad/actions/workflows/ci.yml)
+[![CI](https://github.com/atomicdhruba/NotchPad/actions/workflows/ci.yml/badge.svg)](https://github.com/atomicdhruba/NotchPad/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8%20Strict-blue.svg)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -30,8 +30,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/notchpad.git
-cd notchpad
+git clone https://github.com/atomicdhruba/NotchPad.git
+cd NotchPad
 
 # Install dependencies
 npm install
