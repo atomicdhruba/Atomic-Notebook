@@ -48,13 +48,28 @@
   color: var(--text-primary);
 }
 
-.code-block-wrapper {
+.code-block-wrapper,
+.mermaid-diagram-card {
   position: relative;
   background-color: var(--cm-bg);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   margin: 1.2em 0;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mermaid-diagram-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: var(--bg-surface);
+}
+
+.mermaid-diagram-card svg {
+  max-width: 100%;
+  height: auto;
 }
 
 .code-block-header {

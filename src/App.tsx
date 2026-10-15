@@ -1,12 +1,14 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { EditorView } from '@codemirror/view';
 import { TitleBar } from './components/TitleBar/TitleBar';
+import { Toolbar } from './components/Toolbar/Toolbar';
 import { StatusBar } from './components/StatusBar/StatusBar';
 import { Workspace } from './components/Workspace/Workspace';
 import { CodeEditor } from './components/Editor/CodeEditor';
 import { PreviewPane } from './components/PreviewPane/PreviewPane';
 import { ScrollSynchronizer } from './core/sync/scrollSync';
 import { useTabStore } from './store/tabStore';
+import { useSettingsStore } from './store/settingsStore';
 import { appLogger } from './utils/logger';
 
 const logger = appLogger.createScope('App');
@@ -18,6 +20,11 @@ export const App: React.FC = () => {
   const updateCursor = useTabStore((state) => state.updateCursor);
   const createTab = useTabStore((state) => state.createTab);
   const closeTab = useTabStore((state) => state.closeTab);
+
+  const viewMode = useSettingsStore((state) => state.viewMode);
+  const setViewMode = useSettingsStore((state) => state.setViewMode);
+  const lineWrapping = useSettingsStore((state) => state.lineWrapping);
+  const tabSize = useSettingsStore((state) => state.tabSize);
 
   const [editorView, setEditorView] = useState<EditorView | null>(null);
   const [previewEl, setPreviewEl] = useState<HTMLElement | null>(null);
@@ -40,7 +47,7 @@ export const App: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!editorView || !previewEl || activeTab?.documentMode !== 'markdown') {
+    if (!editorView || !previewEl || activeTab?.documentMode !== 'markdown' || viewMode !== 'split') {
       syncRef.current?.destroy();
       syncRef.current = null;
       return;
@@ -56,7 +63,7 @@ export const App: React.FC = () => {
       synchronizer.destroy();
       syncRef.current = null;
     };
-  }, [editorView, previewEl, activeTab?.documentMode, activeTabId]);
+  }, [editorView, previewEl, activeTab?.documentMode, activeTabId, viewMode]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,6 +75,10 @@ export const App: React.FC = () => {
         if (activeTabId) {
           closeTab(activeTabId);
         }
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        const nextMode = viewMode === 'split' ? 'editor' : viewMode === 'editor' ? 'preview' : 'split';
+        setViewMode(nextMode);
       }
     };
 
@@ -75,11 +86,11 @@ export const App: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeTabId, createTab, closeTab]);
+  }, [activeTabId, createTab, closeTab, viewMode, setViewMode]);
 
   useEffect(() => {
-    logger.info(`Atomic Notebook active tab changed: ${activeTabId}`);
-  }, [activeTabId]);
+    logger.info(`Atomic Notebook tab: ${activeTabId}, mode: ${viewMode}`);
+  }, [activeTabId, viewMode]);
 
   return (
     <div
@@ -95,6 +106,7 @@ export const App: React.FC = () => {
       }}
     >
       <TitleBar />
+      <Toolbar />
       <main
         style={{
           flex: 1,
@@ -105,11 +117,14 @@ export const App: React.FC = () => {
       >
         {activeTab ? (
           <Workspace
+            viewMode={viewMode}
             editorNode={
               <CodeEditor
                 key={activeTab.id}
                 initialContent={activeTab.content}
                 documentMode={activeTab.documentMode}
+                tabSize={tabSize}
+                lineWrapping={lineWrapping}
                 onDocChange={handleDocChange}
                 onCursorChange={handleCursorChange}
                 onViewReady={setEditorView}

@@ -84,6 +84,14 @@ const INITIAL_DOCUMENT = `# Atomic Notebook — Next-Gen Windows Notebook
 | **Pipeline** | Unified + Remark | Live AST compilation & sanitization |
 | **Theme** | Windows 11 Acrylic | High-contrast Antigravity 2.0 design |
 
+### Architecture Flowchart
+\`\`\`mermaid
+graph LR
+  A[CodeMirror 6] -->|Unified AST| B(Remark + Rehype)
+  B -->|Source Mapped| C[Live Preview]
+  C -->|Idiomorph| D((DOM Morph))
+\`\`\`
+
 ### Code Block with Instant Copy
 \`\`\`typescript
 interface SystemConfig {
@@ -97,10 +105,12 @@ $$\\oint_{\\partial \\Sigma} \\mathbf{B} \\cdot d\\boldsymbol{\\ell} = \\mu_0 \\
 
 - [x] Phase 1: CodeMirror 6 Core Workspace
 - [x] Phase 2: Antigravity Markdown Theme & AST Pipeline
-- [ ] Phase 3: Bidirectional Scroll Synchronization & Live HTML Sandbox
+- [x] Phase 3: Bidirectional Scroll Synchronization & Live HTML Sandbox
+- [x] Phase 4: Native Desktop Packaging & GitHub Pages Release
 `;
 
 const initialTab = createTabItem(INITIAL_DOCUMENT);
+
 
 
 export const useTabStore = create<TabState>((set, get) => ({

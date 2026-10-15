@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { renderMarkdownToHtml } from '../../core/markdown/pipeline';
+import { renderMermaidBlocks } from '../../core/markdown/mermaidRenderer';
 import { DocumentMode, TIMINGS } from '../../config/constants';
+import { useSettingsStore } from '../../store/settingsStore';
 import { HtmlSandboxPane } from './HtmlSandboxPane';
 import '../../styles/markdown-theme.css';
 import 'katex/dist/katex.min.css';
@@ -18,6 +20,7 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({
 }) => {
   const [renderedHtml, setRenderedHtml] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const theme = useSettingsStore((state) => state.theme);
 
   useEffect(() => {
     onPreviewRef?.(containerRef.current);
@@ -46,6 +49,12 @@ export const PreviewPane: React.FC<PreviewPaneProps> = ({
       clearTimeout(timer);
     };
   }, [content, documentMode]);
+
+  useEffect(() => {
+    if (documentMode !== 'markdown' || !containerRef.current) return;
+    const isDark = theme !== 'light';
+    renderMermaidBlocks(containerRef.current, isDark);
+  }, [renderedHtml, documentMode, theme]);
 
   /* Delegate copy button events on rendered code block headers */
   useEffect(() => {
